@@ -1,3 +1,8 @@
 PyWordPredictor - Word prediction XML-RPC server with context-based prediction
 ------------------------------------------------------------------------------
 
+PyWordPredictor is at its very early stages: do not expect it to work.
+
+I. Outside tools needed by PyWordPredictor:
+ - SQLObject (http://www.sqlobject.org/)
+ - LDA-C (http://www.cs.princeton.edu/~blei/lda-c/)
