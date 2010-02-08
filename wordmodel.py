@@ -36,15 +36,26 @@ class WordModel(object):
             self._add_document_to_database(map(self._string_to_word,doc))
 
         beta = self.documentmodel.compute_lda(tokenized_documents,ceil(math.log(len(tokenized_documents))))
-        self._add_word_occurences(s
+        self._add_word_occurences(self.documentmodel.dictionnary,worddicts)
         
-
-
         self._add_categories_to_databases(beta,self.documentmodel.worddicts)
 
+    def _add_word_occurences(self,wordlist,worddicts):
+        import copy
+        # Merge word counts across documents
+        globaldict=copy.deepcopy(worddicts[0])
+        glen=len(globaldict)
+        for i in range(1,len(worddicts)):
+            for j in range(glen):
+                globaldict[j]+=worddicts[i][j]
+
+        for i in range(glen):
+            word=self._string_to_word(wordlist[i])
+            word.occurences=globaldict[i]
+
     def _add_categories_to_databases(self,beta,worddicts):
-        
-        pass
+        for i in range(len(worddicts)):
+                                      
 
     def tokenize(self,document):
         from nltk.tokenize import *
