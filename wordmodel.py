@@ -32,12 +32,19 @@ class WordModel(object):
         """
         try:
             models.Quadruplet.dropTable()
+            models.Triplet.dropTable()
+            models.Duplet.dropTable()
             models.Word.dropTable()
-            models.Context.dropTable()
+            models.WordTopic.dropTable()
+            models.Topic.dropTable()
 
         models.Quadruplet.createTable()
+        models.Triplet.createTable()
+        models.Duplet.createTable()
         models.Word.createTable()
-        models.Context.createTable()
+        models.WordTopic.createTable()
+        models.Topic.createTable()
+
 
     def _populate_database(self,documents):
         """Populate an empty database with training data.
