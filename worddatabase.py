@@ -39,9 +39,10 @@ class Word(SQLObject):
 class WordTopic(SQLObject):
     # Relation between a word and a topic
 
-    # probability is given by beta as computed
-    # by LDA
+    # probability is given by beta as computed by LDA,
+    #  expressed as log of the real p(w|t=k)
     probability=FloatCol()
+    word=ForeignKey("Word")
     topic=ForeignKey("Topic")
 
 class Topic(SQLObject):

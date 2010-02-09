@@ -6,12 +6,20 @@ class WordModel(object):
     """Defines the model for words (gives probability
     of each word given previous words and context)
     """
-    def __init__(self):
+    def __init__(self,documents):
+        """Initialize an new Word model.
+        Only one WordModel should be present at any given time,
+        as initializing a new WordModel starts a complete
+        database reconstruction.
+        """
         self.words={}
         self.documentmodel=documentmodel.DocumentModel()
-
+        
+        self._restart_database()
+        self._populate_database(documents)
+        
     def _string_to_word(self,txtstring):
-        """Given a word (txtstring), return the associated
+        """Given a word (txtstring), returns the associated
         database object. Create it if necessary.
         """
         if self.words.has_key(txtstring):
@@ -27,7 +35,7 @@ class WordModel(object):
 
 
     def _restart_database(self):
-        """Destroy current database if it exists;
+        """Destroys current database if it exists;
         Create tables.
         """
         try:
@@ -47,7 +55,7 @@ class WordModel(object):
 
 
     def _populate_database(self,documents):
-        """Populate an empty database with training data.
+        """Populates an empty database with training data.
         """
         # Transform a document in a list of words
         tokenized_documents=map(self.tokenize,documents)
@@ -62,10 +70,10 @@ class WordModel(object):
         
         self._add_word_occurences(self.documentmodel.dictionnary,worddicts)
         
-        self._add_categories_to_databases(beta,self.documentmodel.worddicts)
+        self._add_categories_to_databases(beta,self.documentmodel.dictionnary)
 
     def _add_word_occurences(self,wordlist,worddicts):
-        """Add the nomber of occurence of each word in
+        """Adds the nomber of occurence of each word in
         wordlist, according to worddicts, in the database
         """
         import copy
@@ -81,9 +89,14 @@ class WordModel(object):
             word=self._string_to_word(wordlist[i])
             word.occurences=globaldict[i]
 
-    def _add_categories_to_databases(self,beta,worddicts):
-        for i in range(len(worddicts)):
-            pass       
+    def _add_categories_to_databases(self,beta,vocabulary):
+        """Adds probability of each word given a topic to the database
+        """
+        topics=[models.Topic(topicid=i) for i in range(len(beta[0]))]
+
+        for i in xrange(len(vocabulary)):
+            for j in range(len(topics)):
+                wordtopic=models.WordTopic(probability=beta[i][j],topic=topics[j],word=self._string_to_word(vocabulary[i]))           
 
     def tokenize(self,document):
         """Splits a document (string) in a list of words/tokens.

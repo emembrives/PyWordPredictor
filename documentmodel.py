@@ -18,7 +18,7 @@ class DocumentModel(object):
         return dict([(x,wordlist.count(dictionnary[x])) for x in range(0,len(dictionnary))])
 
     def _write_input_file(self):
-        """Write correctly-formatted input file for LDA-C.
+        """Writes correctly-formatted input file for LDA-C.
         """
         ustrfile=u""
         length=len(self.worddicts)
@@ -31,7 +31,7 @@ class DocumentModel(object):
     def compute_lda(self,documents,k):
         """Main function of the class;
         Given a list of lists of words (documents) and a number
-        of topics (k), compute the LDA and return beta.
+        of topics (k), computes the LDA and return beta.
         """
         self._create_bags_of_words(documents)
         self._write_input_file()
