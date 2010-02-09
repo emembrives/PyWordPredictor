@@ -2,10 +2,13 @@ from sqlobject import *
 import re, datetime
 import sys, os
 
+
+# Create a connection to the database (SQLite)
 db_filename = os.path.abspath('data.db')
+connection_string = 'sqlite:' + db_filename
+
 #if os.path.exists(db_filename):
 #    os.unlink(db_filename)
-connection_string = 'sqlite:' + db_filename
 
 connection = connectionForURI(connection_string)
 sqlhub.processConnection = connection
@@ -34,8 +37,13 @@ class Word(SQLObject):
     wordtopic=MultipleJoin("WordTopic")
 
 class WordTopic(SQLObject):
+    # Relation between a word and a topic
+
+    # probability is given by beta as computed
+    # by LDA
     probability=FloatCol()
     topic=ForeignKey("Topic")
 
 class Topic(SQLObject):
+    # A topic
     topicid=IntCol()
