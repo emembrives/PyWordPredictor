@@ -17,13 +17,13 @@ class DocumentModel(object):
         """
         return dict([(x,wordlist.count(dictionnary[x])) for x in range(0,len(dictionnary))])
 
-    def _write_input_file(self):
+    def _write_input_file(self,worddicts):
         """Writes correctly-formatted input file for LDA-C.
         """
         ustrfile=u""
-        length=len(self.worddicts)
+        length=len(worddicts)
         for docu in range(length):
-            ustrfile+=str(length)+u" "+str(self.worddicts[docu])[1:-1]+"\n"
+            ustrfile+=str(length)+u" "+str(worddicts[docu])[1:-1]+"\n"
         file=open("documents.txt","w")
         file.write(ustrfile)
         file.close()
@@ -34,11 +34,12 @@ class DocumentModel(object):
         of topics (k), computes the LDA and return beta.
         """
         self._create_bags_of_words(documents)
-        self._write_input_file()
+        self._write_input_file(self.worddicts)
 
         # Compute LDA calling LDA-C
         import subprocess
-        subprocess.call(["lda","est","1",str(k),"settings.txt","documents.txt","random","data"])
+        #subprocess.call(["lda","est","1",str(k),"settings.txt","documents.txt","random","data"])
+        subprocess.call(["lda","est","estimate",str(k),"settings.txt","documents.txt","random","data"])
 
         # Load beta from file and return it
         beta=[[] for x in range(0,len(self.dictionnary))]
@@ -52,3 +53,18 @@ class DocumentModel(object):
     
         return beta
 
+    def compute_inference(self,document):
+        """Infer topics in the supplied documents
+        """
+        worddict=self.create_worddict(document,dictionnary)
+        self._write_input_file(worddict)
+        
+        import subprocess
+        subprocess.call(["lda","inf","settings.txt","data/final","documents.txt","docestimate"])
+        
+        file=open("data/final.beta")
+        line = file.readline():
+        context=map(float,line.split())
+        file.close()
+        
+        return context

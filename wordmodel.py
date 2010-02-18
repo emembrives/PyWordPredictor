@@ -65,7 +65,8 @@ class WordModel(object):
         # Compute LDA on the documents
         # Use the log of the number of document as a rule of thumb for the
         # number of topics (sqrt can be another heuristic)
-        beta = self.documentmodel.compute_lda(tokenized_documents,ceil(math.log(len(tokenized_documents))))
+        self._number_of_topics=ceil(math.log(len(tokenized_documents)))
+        beta = self.documentmodel.compute_lda(tokenized_documents,self._number_of_topics)
 
         
         self._add_word_occurences(self.documentmodel.dictionnary,worddicts)
@@ -141,3 +142,6 @@ class WordModel(object):
                     dup=dup[0]
                 dup.occurences+=1
 
+    def predict_word(self,context,previouswords):
+        """Predict the next word
+        """
