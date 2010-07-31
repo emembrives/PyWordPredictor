@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # PyWordPredictor - XML-RPC word prediction server
 # Copyright (C) 2010 - Etienne Membrives
 #

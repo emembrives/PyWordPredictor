@@ -1,4 +1,5 @@
 PyWordPredictor - Word prediction XML-RPC server with context-based prediction
+Copyright 2010 - Etienne Membrives (http://projects.membrives.fr)
 ------------------------------------------------------------------------------
 
 PyWordPredictor is at its very early stages: do not expect it to work.
